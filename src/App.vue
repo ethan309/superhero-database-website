@@ -1,17 +1,35 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your New Vue.js App"/>
+    <br>
+    <label for="back">Search
+        <input v-on:keypress.enter="updateSearch" v-model="query" type="text" id="query">
+        <button v-on:click="updateSearch" id="trigger-query">GO</button>
+    </label>
+    <br>
+    <CharacterStats v-show="characterName.length > 0" v-bind:name="characterName"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CharacterStats from './components/CharacterStats.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    CharacterStats
+  },
+  data: function() {
+    return {
+        query: '',
+        characterName: '',
+        empty: true
+      };
+  },
+  methods: {
+    updateSearch: function(){
+      this.characterName = this.query;
+    }
   }
 }
 </script>
