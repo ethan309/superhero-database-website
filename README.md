@@ -1,24 +1,25 @@
-# superhero-database-website
+# Superhero, Supervillain, & Character Database
+CSCE 411 (Data Modeling) Final Project
 
-## Project setup
+## Project Setup
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and Hot-reloads for Development
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+### Compiles and Minifies for Production
 ```
 yarn build
 ```
 
-### Lints and fixes files
+### Lints and Fixes Files
 ```
 yarn lint
 ```
 
-### Customize configuration
+### Customize Configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
