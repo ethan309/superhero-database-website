@@ -7,6 +7,7 @@
         <button v-on:click="updateSearch" id="trigger-query">GO</button>
     </label>
     <br>
+    <p v-show="characterName.length > 0">Results for {{characterName}}:</p>
     <CharacterStats v-show="characterName.length > 0" v-bind:name="characterName"/>
   </div>
 </template>
