@@ -1,33 +1,19 @@
 <template>
   <div id="app">
     <NavBar></NavBar>
-    <div v-for="name in suggestedNames" :key="name">
-      <CharacterCard name="name"></CharacterCard>
-    </div>
+    <CharacterSearch></CharacterSearch>
   </div>
 </template>
 
 <script>
-import CharacterCard from '../components/CharacterCard.vue'
+import CharacterSearch from '../components/CharacterSearch.vue'
 import NavBar from '../components/NavBar.vue'
 
 export default {
   name: 'Home',
   components: {
-    CharacterCard,
+    CharacterSearch,
     NavBar
-  },
-  data: function() {
-    return {
-      suggestedNames: [
-        'John Smith',
-        'John Doe',
-        'Jane Doe'
-      ]
-    };
-  },
-  methods: {
-
   }
 }
 </script>

@@ -1,8 +1,10 @@
 <template>
     <div id="NavBar">
-      <h1>NavBar</h1>
       <span>
-          <router-link to="/Home">Home</router-link> &nbsp;
+          <router-link to="/Home">
+            <img alt="Vue logo" src="../assets/logo.png">
+          </router-link>
+          &nbsp;
           <router-link to="/Search">Search</router-link>
       </span>
     </div>
@@ -11,15 +13,7 @@
 <script>
 
 export default {
-  name: 'NavBar',
-  data: function() {
-    return {
-        
-    }
-  },
-  methods: {
-    
-  }
+  name: 'NavBar'
 }
 </script>
 
