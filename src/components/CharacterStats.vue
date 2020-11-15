@@ -1,7 +1,5 @@
 <template>
   <div class="stats">
-    <p v-show="!resultsFound">NO RESULTS</p>
-    <p v-show="resultsFound">( results for {{name}} would be here )</p>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="powers"></div>
   </div>

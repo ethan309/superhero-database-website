@@ -1,36 +1,30 @@
 <template>
   <div id="app">
+    <NavBar></NavBar>
     <img alt="Vue logo" src="./assets/logo.png">
-    <br>
-    <label for="back">Search
-        <input v-on:keypress.enter="updateSearch" v-model="query" type="text" id="query">
-        <button v-on:click="updateSearch" id="trigger-query">GO</button>
-    </label>
-    <br>
-    <p v-show="characterName.length > 0">Results for {{characterName}}:</p>
-    <CharacterStats v-show="characterName.length > 0" v-bind:name="characterName"/>
+    <div v-for="name in suggestedNames" :key="name">
+      <CharacterCard name="name"></CharacterCard>
+    </div>
   </div>
 </template>
 
 <script>
-import CharacterStats from './components/CharacterStats.vue'
+import CharacterCard from './components/CharacterCard.vue'
+import NavBar from './components/NavBar.vue'
 
 export default {
   name: 'App',
   components: {
-    CharacterStats
+    CharacterCard,
+    NavBar
   },
   data: function() {
     return {
-        query: '',
-        characterName: '',
-        empty: true
+
       };
   },
   methods: {
-    updateSearch: function(){
-      this.characterName = this.query;
-    }
+
   }
 }
 </script>
