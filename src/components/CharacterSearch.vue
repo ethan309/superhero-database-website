@@ -6,17 +6,17 @@
     </label>
     <br>
     <p v-show="characterName.length > 0">Results for {{characterName}}:</p>
-    <CharacterStats v-show="characterName.length > 0" v-bind:name="characterName"/>
+    <CharacterCard v-show="characterName.length > 0" v-bind:name="characterName"/>
   </div>
 </template>
 
 <script>
-import CharacterStats from './components/CharacterStats.vue'
+import CharacterCard from './CharacterCard.vue'
 
 export default {
   name: 'App',
   components: {
-    CharacterStats
+    CharacterCard
   },
   data: function() {
     return {
