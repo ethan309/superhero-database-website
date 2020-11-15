@@ -1,10 +1,10 @@
 <template>
     <div id="NavBar">
-      <router-link to="/Home">
+      <router-link id='home' to="/Home">
         <img alt="Main logo" src="../assets/main.png">
       </router-link>
       <ul v-for="link in links" v-bind:key="link.title">
-        <router-link v-bind:to="'/' + link.destination">{{link.title}}</router-link>
+        <router-link class="link" v-bind:to="'/' + link.destination">{{link.title}}</router-link>
       </ul>
     </div>
 </template>
@@ -25,14 +25,36 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+#NavBar {
+  background-color: blanchedalmond;
+  position: fixed;
+  top: 5px;
+  width: 100%;
+  padding: 2 px;
 }
-a {
+#home {
+  float: left;
+  display: block;
+  padding: 10px;
+}
+.link {
   color: #42b983;
+  float: right;
+  display: block;
+  padding: 10px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  align-self: center;
 }
-.NavBar {
+ul {
   display: inline;
+  width: 100%;
+  text-align: center;
+  padding-right: 100px;
+}
+img {
+  height: 100px;
+  object-fit: contain;
 }
 
 </style>

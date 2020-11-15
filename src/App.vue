@@ -1,10 +1,24 @@
 <template>
-  <router-view>
+  <div>
+    <NavBar></NavBar>
+    <router-view>
     </router-view>
+  </div>
 </template>
 
 <script>
+import NavBar from './components/NavBar.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    NavBar,
+  }
 }
 </script>
+
+<style scoped>
+router-view {
+  margin-top: 150px;
+}
+</style>

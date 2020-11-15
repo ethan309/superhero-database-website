@@ -1,19 +1,16 @@
 <template>
   <div id="app">
-    <NavBar></NavBar>
     <CharacterSearch></CharacterSearch>
   </div>
 </template>
 
 <script>
 import CharacterSearch from '../components/CharacterSearch.vue'
-import NavBar from '../components/NavBar.vue'
 
 export default {
   name: 'Home',
   components: {
-    CharacterSearch,
-    NavBar
+    CharacterSearch
   }
 }
 </script>

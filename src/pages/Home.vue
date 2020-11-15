@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <NavBar></NavBar>
-    <div v-for="name in suggestedNames" v-bind:key="name">
-      <CharacterCard v-bind:name="name"></CharacterCard>
+    <div id="content">
+      <div v-for="name in suggestedNames" v-bind:key="name">
+        <CharacterCard v-bind:name="name"></CharacterCard>
+      </div>
     </div>
   </div>
 </template>
