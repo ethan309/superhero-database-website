@@ -17,11 +17,11 @@ export default {
     return {
         resultsFound: true,
         stats: [
-          {category: "Intelligence", value: 70 },
-          {category: "Strength", value: 83 },
-          {category: "Speed", value: 44 },
-          {category: "Stamina", value: 49 },
-          {category: "Energy", value: 80 }
+          {category: 'Intelligence', value: 70 },
+          {category: 'Strength', value: 83 },
+          {category: 'Speed', value: 44 },
+          {category: 'Stamina', value: 49 },
+          {category: 'Energy', value: 80 }
         ],
         powers: [
           'Super Strength',

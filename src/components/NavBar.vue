@@ -1,19 +1,26 @@
 <template>
     <div id="NavBar">
-      <span>
-          <router-link to="/Home">
-            <img alt="Vue logo" src="../assets/logo.png">
-          </router-link>
-          &nbsp;
-          <router-link to="/Search">Search</router-link>
-      </span>
+      <router-link to="/Home">
+        <img alt="Main logo" src="../assets/main.png">
+      </router-link>
+      <ul v-for="link in links" v-bind:key="link.title">
+        <router-link v-bind:to="'/' + link.destination">{{link.title}}</router-link>
+      </ul>
     </div>
 </template>
 
 <script>
 
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  data: function() {
+    return {
+        links: [
+          {title: 'VS', destination: 'Vs' },
+          {title: 'Search Characters', destination: 'Search' }
+        ]
+      };
+  }, 
 }
 </script>
 
@@ -24,4 +31,8 @@ h3 {
 a {
   color: #42b983;
 }
+.NavBar {
+  display: inline;
+}
+
 </style>
