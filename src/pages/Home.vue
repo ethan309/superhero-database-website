@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <NavBar></NavBar>
-    <img alt="Vue logo" src="./assets/logo.png">
+    <img alt="Vue logo" src="../assets/logo.png">
     <div v-for="name in suggestedNames" :key="name">
       <CharacterCard name="name"></CharacterCard>
     </div>
@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import CharacterCard from './components/CharacterCard.vue'
-import NavBar from './components/NavBar.vue'
+import CharacterCard from '../components/CharacterCard.vue'
+import NavBar from '../components/NavBar.vue'
 
 export default {
   name: 'Home',
