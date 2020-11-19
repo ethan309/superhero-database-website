@@ -1,5 +1,6 @@
 <template>
   <div class="stats">
+    <h3>{{name}}</h3>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="powers"></div>
   </div>
@@ -31,11 +32,11 @@ export default {
       };
   },
   mounted() {
+    this.getStatsGraph();
     this.loadStats();
   },
   methods: {
     loadStats: function() {
-      this.getStatsGraph();
       const w = 500;
       const h = 500;
 

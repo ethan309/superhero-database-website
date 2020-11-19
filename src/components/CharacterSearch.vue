@@ -1,12 +1,18 @@
 <template>
   <div id="app">
-    <label for="back">Search
+    <label>Search Characters
         <input v-on:keypress.enter="updateSearch" v-model="query" type="text" id="query">
         <button v-on:click="updateSearch" id="trigger-query">GO</button>
     </label>
     <br>
-    <p v-show="characterName.length > 0">Results for {{characterName}}:</p>
-    <CharacterCard v-show="characterName.length > 0" v-bind:name="characterName"/>
+    <div id="results" v-show="characterName.length > 0">
+      <p>Results for {{characterName}}:</p>
+      <ul v-for="match in searchResults" v-bind:key="match.name">
+        <router-link v-bind:to="{ name: 'Details', params: { name: match.name }}">
+          <CharacterCard v-bind:name="match.name"/>
+        </router-link>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -22,7 +28,7 @@ export default {
     return {
         query: '',
         characterName: '',
-        empty: true
+        searchResults: [{ name: 'John Doe' }, { name: 'Jane Doe' }]
       };
   },
   methods: {

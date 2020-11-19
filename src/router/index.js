@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '../pages/Home.vue'
 import Search from '../pages/Search.vue'
 import Vs from '../pages/Vs.vue'
+import CharacterStats from '../pages/CharacterStats.vue'
 
 
 Vue.use(Router)
@@ -29,6 +30,11 @@ let router = new Router({
         path: '/Vs',
         name: 'Vs',
         component: Vs
+    },
+    {
+        path: '/Details/:name',
+        name: 'CharacterStats',
+        component: CharacterStats
     }
   ]
 })

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div id="window">
     <NavBar></NavBar>
-    <router-view>
+    <router-view id="content">
     </router-view>
   </div>
 </template>
@@ -18,7 +18,14 @@ export default {
 </script>
 
 <style scoped>
-router-view {
+#window {
+  min-width: 100%;
+  width: 100%;
+}
+
+#content {
   margin-top: 150px;
+  min-width: 100%;
+  width: 100%;
 }
 </style>
