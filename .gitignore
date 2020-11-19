@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
 /dist
-
+/api/routes/superhero-database-website
+/api/routes/superhero-database-website/*
 
 # local env files
 .env.local

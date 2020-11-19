@@ -7,20 +7,26 @@ set -e
 # npm run build
 yarn build
 
-# navigate into the build output directory
-cd dist
+# clear out old server information
+rm -rf api/routes/superhero-database-website
+mkdir api/routes/superhero-database-website
+mkdir api/routes/superhero-database-website/css
+mkdir api/routes/superhero-database-website/js
+mkdir api/routes/superhero-database-website/img
 
-# if you are deploying to a custom domain
-# echo 'www.example.com' > CNAME
+#copy dist contents to api
+mv dist/index.html api/routes/index.html
+mv dist/css/* api/routes/superhero-database-website/css
+mv dist/img/* api/routes/superhero-database-website/img
+mv dist/js/* api/routes/superhero-database-website/js
+mv dist/favicon.ico api/routes/superhero-database-website/favicon.ico
 
-git init
-git add -A
-git commit -m 'deploy'
+# move to server
+cd api
 
-# if you are deploying to https://<USERNAME>.github.io
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+# install dependencies
+npm install
 
-# if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:ethan309/superhero-database-website.git master:gh-pages
+# start server
+npm start
 
-cd -
