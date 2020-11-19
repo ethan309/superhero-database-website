@@ -30,4 +30,27 @@ li {
 a {
   color: #42b983;
 }
+.card {
+  display: block;
+  width: 100px;
+  height: 125px;
+  padding: 80px 50px;
+  background-color: #74717e;
+  border-radius: 10px;
+  margin: 5px;
+  position: relative;
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+  color: #fff;
+  -webkit-box-shadow: 9px 10px 22px -8px rgba(209,193,209,.5);
+  -moz-box-shadow: 9px 10px 22px -8px rgba(209,193,209,.5);
+  box-shadow: 9px 10px 22px -8px rgba(209,193,209,.5);
+  cursor: pointer;
+  will-change: transform;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  transform: scale(1.1);
+}
 </style>

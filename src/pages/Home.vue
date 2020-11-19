@@ -1,8 +1,14 @@
 <template>
   <div id="app">
-    <ul class="character-cards" v-for="name in suggestedNames" v-bind:key="name">
-      <li><CharacterCard v-bind:name="name"></CharacterCard></li>
-    </ul>
+   <div id="suggested-characters">
+      <ul v-for="name in suggestedNames" v-bind:key="name">
+        <li>
+          <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
+            <CharacterCard v-bind:name="name"/>
+          </router-link>
+        </li>
+      </ul>
+   </div>
   </div>
 </template>
 
@@ -17,7 +23,7 @@ export default {
   data: function() {
     return {
       suggestedNames: [
-        'John Smith',
+        'John Smith II',
         'John Doe',
         'Jane Doe'
       ]
@@ -39,41 +45,15 @@ export default {
   margin-top: 60px;
   min-width: 100%;
 }
-
-ul {
-  min-width: 100%;
-  padding-left: 0;
+#suggested-characters {
   display: flex;
   flex-flow: row wrap;
 }
-  
+ul {
+  padding-left: 0;
+}
 li {
   list-style-type: none;
   padding: 10px 10px;
-  transition: all 0.3s ease;
-}
-
-li:hover {
-  transform: scale(1.1);
-}
-  
-.card {
-  display: block;
-  width: 100px;
-  height: 125px;
-  padding: 80px 50px;
-  background-color: #74717e;
-  border-radius: 10px;
-  margin: 5px;
-  position: relative;
-  text-align: center;
-  font-weight: 600;
-  font-size: 20px;
-  color: #fff;
-  -webkit-box-shadow: 9px 10px 22px -8px rgba(209,193,209,.5);
-  -moz-box-shadow: 9px 10px 22px -8px rgba(209,193,209,.5);
-  box-shadow: 9px 10px 22px -8px rgba(209,193,209,.5);
-  cursor: pointer;
-  will-change: transform;
 }
 </style>
