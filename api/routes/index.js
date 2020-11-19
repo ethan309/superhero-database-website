@@ -1,4 +1,5 @@
 var express = require('express');
+const { ObjectId } = require('mongodb');
 var router = express.Router();
 var path = require("path");
 
@@ -18,6 +19,15 @@ router.get('/', function(req, res, next) {
 router.get('/characters/:charName', function(req, res) {
   let result;
   result = client.db("Superheroes").collection("Character").find({Name: { '$regex': req.params.charName, '$options': 'i'}}).toArray()
+  .then(results => {
+    console.log(results);
+    res.send(results);
+  });
+})
+
+router.get('/id/:id', function(req, res) {
+  const id = new ObjectId(req.params.id);
+  client.db("Superheroes").collection("Character").findOne({_id: id})
   .then(results => {
     console.log(results);
     res.send(results);
