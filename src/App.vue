@@ -1,6 +1,6 @@
 <template>
   <div id="window">
-    <NavBar></NavBar>
+    <NavBar class="header"></NavBar>
     <router-view id="content">
     </router-view>
   </div>
@@ -21,6 +21,10 @@ export default {
 #window {
   min-width: 100%;
   width: 100%;
+}
+
+.header {
+  z-index: 999;
 }
 
 #content {
