@@ -1,6 +1,6 @@
 <template>
   <div class="stats">
-    <h3>{{name}}</h3>
+    <h3>Name Here (id: {{id}})</h3>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="powers"></div>
   </div>
@@ -11,11 +11,9 @@ import * as d3 from 'd3';
 
 export default {
   name: 'CharacterStats',
-  props: {
-    name: String
-  },
   data: function() {
     return {
+        id: this.$route.params.id,
         resultsFound: true,
         stats: [
           {category: 'Intelligence', value: 70 },
@@ -34,6 +32,7 @@ export default {
   mounted() {
     this.getStatsGraph();
     this.loadStats();
+    console.log('hi parker');
   },
   methods: {
     loadStats: function() {

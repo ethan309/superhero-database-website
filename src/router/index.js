@@ -32,8 +32,8 @@ let router = new Router({
         component: Vs
     },
     {
-        path: '/Details/:name',
-        name: 'CharacterStats',
+        path: '/Details/:id',
+        name: 'Details',
         component: CharacterStats
     }
   ]
