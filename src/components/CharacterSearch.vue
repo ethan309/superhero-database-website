@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <label>Search Characters
+    <label>Search
         <input v-on:keypress.enter="updateSearch" v-model="query" type="text" id="query">
         <button v-on:click="updateSearch" id="trigger-query">GO</button>
     </label>
@@ -8,7 +8,7 @@
     <div id="results" v-show="characterName.length > 0">
       <p>Results for {{characterName}}:</p>
       <ul v-for="match in searchResults" v-bind:key="match.name">
-        <router-link v-bind:to="{ name: 'Details', params: { name: match.name }}">
+        <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
           <CharacterCard v-bind:name="match.name"/>
         </router-link>
       </ul>
@@ -28,7 +28,7 @@ export default {
     return {
         query: '',
         characterName: '',
-        searchResults: [{ name: 'John Doe' }, { name: 'Jane Doe' }]
+        searchResults: [{ _id: '1234', name: 'Match 01' }, { _id: '5678', name: 'Match 02' }]
       };
   },
   methods: {
