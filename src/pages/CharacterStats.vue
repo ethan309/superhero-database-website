@@ -1,7 +1,6 @@
 <template>
   <div class="stats">
-    <p v-show="!resultsFound">NO RESULTS</p>
-    <p v-show="resultsFound">( results for {{name}} would be here )</p>
+    <h3>{{name}}</h3>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="powers"></div>
   </div>
@@ -19,11 +18,11 @@ export default {
     return {
         resultsFound: true,
         stats: [
-          {category: "Intelligence", value: 70 },
-          {category: "Strength", value: 83 },
-          {category: "Speed", value: 44 },
-          {category: "Stamina", value: 49 },
-          {category: "Energy", value: 80 }
+          {category: 'Intelligence', value: 70 },
+          {category: 'Strength', value: 83 },
+          {category: 'Speed', value: 44 },
+          {category: 'Stamina', value: 49 },
+          {category: 'Energy', value: 80 }
         ],
         powers: [
           'Super Strength',
@@ -33,11 +32,11 @@ export default {
       };
   },
   mounted() {
+    this.getStatsGraph();
     this.loadStats();
   },
   methods: {
     loadStats: function() {
-      this.getStatsGraph();
       const w = 500;
       const h = 500;
 
