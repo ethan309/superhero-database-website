@@ -8,52 +8,59 @@
 
 <script>
 import * as d3 from 'd3';
+import axios from 'axios';
 
 export default {
   name: 'CharacterStats',
   data: function() {
     return {
         id: this.$route.params.id,
-        resultsFound: true,
-        stats: [
-          {category: 'Intelligence', value: 70 },
-          {category: 'Strength', value: 83 },
-          {category: 'Speed', value: 44 },
-          {category: 'Stamina', value: 49 },
-          {category: 'Energy', value: 80 }
-        ],
-        powers: [
-          'Super Strength',
-          'Super Speed',
-          'Thirstokenesis'
-        ]
+        name: '',
+        stats: [],
+        powers: []
       };
   },
   mounted() {
-    this.getStatsGraph();
-    this.loadStats();
-    console.log('hi parker');
+    axios
+      .get(`/id/${this.id}`)
+      .then((characterData) => {
+        this.parseCharacterData(characterData);
+        this.displayStatsGraph();
+      });
   },
   methods: {
-    loadStats: function() {
-      const w = 500;
-      const h = 500;
+    parseCharacterData: function(data) {
+      this.powers = data['Powers'].length > 0 ? data['Powers'].slice(0) : [];
+      this.name = data['Name'];
 
-      const svg = d3
-        .select("#powers")
-        .append("svg")
-        .attr("width", w)
-        .attr("height", h);
-      
-      svg.selectAll("text")
-        .data(this.powers)
-        .enter()
-        .append("text")
-        .text(d => `${d}`)
-        .attr("dy", -8)
-        .attr("y", (d, i) => (i + 1) * 25);
+      const statsColumns = Set([
+        "Alignment",
+        "Gender",
+        "Eyecolor",
+        "Race",
+        "Haircolor",
+        "Publisher",
+        "Skincolor",
+        "Height",
+        "Weight",
+        "Intelligence",
+        "Strength",
+        "Speed",
+        "Durability",
+        "Power",
+        "Combat"
+      ]);
+
+      Object.entries(data).forEach(([key, entry]) => {
+        if(statsColumns.has(key) && entry.length > 0) {
+          this.stats.append({
+            category: key,
+            value: entry
+          });
+        }
+      });
     },
-    getStatsGraph: function() {
+    displayStatsGraph: function() {
       const w = 500;
       const h = 500;
 

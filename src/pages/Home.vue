@@ -1,10 +1,10 @@
 <template>
   <div id="app">
    <div id="suggested-characters">
-      <ul v-for="name in suggestedNames" v-bind:key="name">
+      <ul v-for="character in suggestedCharacters" v-bind:key="character.name">
         <li>
-          <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
-            <CharacterCard v-bind:name="name"/>
+          <router-link v-bind:to="{ name: 'Details', params: { id: character._id }}">
+            <CharacterCard v-bind:name="character.name"/>
           </router-link>
         </li>
       </ul>
@@ -22,15 +22,12 @@ export default {
   },
   data: function() {
     return {
-      suggestedNames: [
-        'John Smith II',
-        'John Doe',
-        'Jane Doe'
+      suggestedCharacters: [
+        { name: 'John Smith II', _id: '5fb18d26b2c29d1828817e26' },
+        { name: 'John Doe', _id: '1236' },
+        { name: 'Jane Doe', _id: '1235' },
       ]
     };
-  },
-  methods: {
-
   }
 }
 </script>
