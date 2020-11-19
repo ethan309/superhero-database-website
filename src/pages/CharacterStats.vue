@@ -1,6 +1,6 @@
 <template>
   <div class="stats">
-    <h3>Name Here (id: {{id}})</h3>
+    <h3>{{name}} (id: {{id}})</h3>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="powers"></div>
   </div>
@@ -30,10 +30,10 @@ export default {
   },
   methods: {
     parseCharacterData: function(data) {
-      this.powers = data['Powers'].length > 0 ? data['Powers'].slice(0) : [];
+      this.powers = data['Powers'] !== undefined ? data['Powers'].slice(0) : [];
       this.name = data['Name'];
 
-      const statsColumns = Set([
+      const statsColumns = new Set([
         "Alignment",
         "Gender",
         "Eyecolor",

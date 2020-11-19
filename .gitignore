@@ -3,6 +3,7 @@ node_modules
 /dist
 /api/routes/superhero-database-website
 /api/routes/superhero-database-website/*
+/api/routes/index.html
 
 # local env files
 .env.local
