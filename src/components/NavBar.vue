@@ -28,7 +28,8 @@ export default {
 #NavBar {
   background-color: blanchedalmond;
   position: fixed;
-  top: 5px;
+  top: 0px;
+  left: 0px;
   width: 100%;
   padding: 2 px;
 }
