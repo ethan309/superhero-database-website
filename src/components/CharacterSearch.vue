@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <label>Search
-        <input v-on:keypress.enter="updateSearch" v-model="query" type="text" id="query">
-        <button v-on:click="updateSearch" id="trigger-query">GO</button>
+    <label id="search">Search
+        <input v-on:keypress.enter="updateSearch" v-on:input="updateSearch" v-model="query" type="text" id="query">
     </label>
     <br>
     <div id="results" v-show="characterName.length > 0">
@@ -39,13 +38,13 @@ export default {
   },
   methods: {
     updateSearch: async function() {
-      this.characterName = this.query;
-      const characters = await axios.get(`/api/characters/${this.characterName}`);
+      const characters = await axios.get(`/api/characters/${this.query}`);
       if(characters.status === 200) {
         this.searchResults = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
           [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ],
           []
         );
+        this.characterName = this.query;
       } else {
         this.queryError = true;
       }
