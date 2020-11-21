@@ -38,7 +38,7 @@ export default {
       this.data = data;
     },
     displayStatsGraph: function() {
-      const numericalStats = this.stats.filter((stat) => { return typeof stat.value === 'number' });
+      // const numericalStats = this.stats.filter((stat) => { return typeof stat.value === 'number' });
 
       // Template from https://bl.ocks.org/mbostock/3885304
       var svg = d3.select("svg"),

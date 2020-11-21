@@ -16,7 +16,7 @@ export default {
   data: function() {
     return {
         links: [
-          {title: 'VS', destination: 'Vs' },
+          {title: 'Explore', destination: 'Explore' },
           {title: 'Search Characters', destination: 'Search' }
         ]
       };
