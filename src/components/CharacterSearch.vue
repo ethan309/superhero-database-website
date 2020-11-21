@@ -38,7 +38,7 @@ export default {
       };
   },
   methods: {
-    updateSearch: async function(){
+    updateSearch: async function() {
       this.characterName = this.query;
       const characters = await axios.get(`/api/characters/${this.characterName}`);
       if(characters.status === 200) {
