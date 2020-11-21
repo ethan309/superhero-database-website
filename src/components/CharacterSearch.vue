@@ -4,10 +4,10 @@
         <input v-on:keypress.enter="updateSearch" v-on:input="updateSearch" v-model="query" type="text" id="query">
     </label>
     <br>
-    <div id="results" v-show="characterName.length > 0">
+    <div id="results" v-show="characterName.length > 0 || queryError">
       <p>Results for {{characterName}}:</p>
-      <p v-show="searchResults.length === 0">No matches. Double-check your search term.</p>
-      <p v-show="error" class="error">There was an error completing your search. Please try again.</p>
+      <p v-show="!queryError && searchResults.length === 0">No matches. Double-check your search term.</p>
+      <p v-show="queryError" class="error">There was an error completing your search. Please try again.</p>
       <div id="matches">
         <ul v-for="match in searchResults" v-bind:key="match.name">
         <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
@@ -38,15 +38,22 @@ export default {
   },
   methods: {
     updateSearch: async function() {
-      const characters = await axios.get(`/api/characters/${this.query}`);
-      if(characters.status === 200) {
-        this.searchResults = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
-          [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ],
-          []
-        );
-        this.characterName = this.query;
-      } else {
-        this.queryError = true;
+      if(this.query.length > 0) {
+        try {
+          const characters = await axios.get(`/api/characters/${this.query}`);
+          if(characters.status === 200) {
+            this.searchResults = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
+              [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ],
+              []
+            );
+            this.queryError = false;
+            this.characterName = this.query;
+          } else {
+            this.queryError = true;
+          }
+        } catch(exception) {
+          this.queryError = true;
+        }
       }
     }
   }

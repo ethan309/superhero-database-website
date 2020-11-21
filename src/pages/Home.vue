@@ -42,17 +42,21 @@ export default {
     };
   },
   async mounted() {
-    const characters = await axios.get(`/api/characters`);
-    if(characters.status === 200) {
-      const allCharacters  = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
-        hasKnownStats(currectCharacter) ? 
-          [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ] : 
-          [ ...allFilteredCharacters],
-        []
-      );
-      this.suggestedCharacters = allCharacters.sort(() => Math.random() - 0.5).slice(0, 40);
-      this.suggestedCharactersLoaded = true;
-    } else {
+    try {
+      const characters = await axios.get(`/api/characters`);
+      if(characters.status === 200) {
+        const allCharacters  = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
+          hasKnownStats(currectCharacter) ? 
+            [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ] : 
+            [ ...allFilteredCharacters],
+          []
+        );
+        this.suggestedCharacters = allCharacters.sort(() => Math.random() - 0.5).slice(0, 40);
+        this.suggestedCharactersLoaded = true;
+      } else {
+        this.suggestedCharactersError = true;
+      }
+    } catch(exception) {
       this.suggestedCharactersError = true;
     }
   },

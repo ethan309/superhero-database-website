@@ -62,7 +62,7 @@ export default {
         .attr("width", w)
         .attr("height", h);
 
-      // const sortedGDP = this.gdp.sort((a, b) => (a.value > b.value ? 1 : -1));
+      // const sortedStats = numericalStats.sort((a, b) => (a.value > b.value ? 1 : -1));
       const color = d3.scaleOrdinal(d3.schemeDark2);
 
       const max_stats = d3.max(numericalStats, o => o.value);
@@ -103,7 +103,7 @@ export default {
         });
 
       g.selectAll("text")
-        .data(this.stats)
+        .data(numericalStats)
         .enter()
         .append("text")
         .text(d => `${d.category}: ${d.value}`)
