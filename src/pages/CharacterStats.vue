@@ -28,9 +28,9 @@ export default {
     const characterData = await axios.get(`/api/id/${this.id}`);
     console.log(characterData);
     if(characterData.status === 200) {
+      this.resultsFound = true;
       this.parseCharacterData(characterData.data);
       this.displayStatsGraph();
-      this.resultsFound = true;
     } else {
       this.resultsFound = false;
     }

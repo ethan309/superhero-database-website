@@ -14,6 +14,7 @@
 
 <script>
 import CharacterCard from '../components/CharacterCard.vue'
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -22,13 +23,22 @@ export default {
   },
   data: function() {
     return {
-      suggestedCharacters: [
-        { name: 'Abe Sapien', _id: '5fb5f3603e8e0b4910ea0d79' },
-        { name: 'Do not click me', _id: '1236' },
-        { name: 'Do not click me', _id: '1235' },
-      ]
+      suggestedCharacters: []
     };
-  }
+  },
+  async mounted() {
+    const characters = await axios.get(`/api/characters`);
+    if(characters.status === 200) {
+      this.suggestedCharacters = Object.keys(characters.data)
+        .filter(key => ['_id', 'name'].includes(key))
+        .reduce((obj, key) => {
+          return {
+            ...obj,
+            [key]: characters.data[key]
+          };
+        }, {});
+    }
+  },
 }
 </script>
 
