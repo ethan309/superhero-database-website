@@ -46,7 +46,7 @@ export default {
       const characters = await axios.get(`/api/characters`);
       if(characters.status === 200) {
         const allCharacters  = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
-          hasKnownStats(currectCharacter) ? 
+          hasKnownStats(currectCharacter.data) ? 
             [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ] : 
             [ ...allFilteredCharacters],
           []
@@ -58,6 +58,7 @@ export default {
       }
     } catch(exception) {
       this.suggestedCharactersError = true;
+      console.log(exception);
     }
   },
 }

@@ -52,6 +52,7 @@ export default {
             this.queryError = true;
           }
         } catch(exception) {
+          console.log(exception);
           this.queryError = true;
         }
       }
