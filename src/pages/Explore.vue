@@ -1,32 +1,44 @@
 <template>
   <div class="stats">
+    <select v-on:change="displayStatsGraph($event.target.value)" name="Options" id="statOptions">
+      <option v-for="option in statOptions" v-bind:key="option" v-bind:value="option">{{option}}</option>
+    </select>
     <div v-show="!resultsFound" class="error">
       <p>There was an error loading data for the requested character. Please try again.</p>
     </div>
-    <div>View by intelligence</div>
-    <div>View by strength</div>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="details"></div>
+    <div id="matches">
+      <ul v-for="match in selectedCharacters" v-bind:key="match.name">
+        <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
+          <CharacterCard v-bind:name="match.name"/>
+        </router-link>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3';
 import axios from 'axios';
-import { statsColumns } from '../constants.js';
 
 export default {
   name: 'Explore',
   data: function() {
     return {
         data: [],
-        resultsFound: false
+        resultsFound: false,
+        statOptions: [
+          'Height',
+          'Weight',
+          'Intelligence',
+          'Strength',
+          'Speed',
+          'Durability',
+          'Combat'
+        ],
+        selectedCharacters: []
       };
-  },
-  computed: {
-    statOptions: function() {
-      return statsColumns;
-    }
   },
   async mounted() {
     const characterData = await axios.get(`/api/characters`);
@@ -65,7 +77,10 @@ export default {
       var width = 1600 - margin.left - margin.right;
       var height = (20 * data.length) - margin.top - margin.bottom;
 
-      // append the svg object to the body of the page
+      // remove old graph
+      d3.select("#stats").selectAll("svg").remove();
+
+      // append the new svg object to the body of the page
       var svg = d3.select("#stats")
         .append("svg")
           .attr("width", width + margin.left + margin.right)
@@ -73,10 +88,11 @@ export default {
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
+      
       var svg_details = d3.select("#details")
         .append("svg")
           .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          .attr("height", 50)
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -106,6 +122,8 @@ export default {
         .style("width", `${width}px`)
         .style("overflow-wrap", "break-word");
 
+      const allCharacterData = this.data.slice(0);
+
       //Bars
       svg.selectAll("myRect")
         .data(data)
@@ -117,21 +135,31 @@ export default {
         .attr("height", 10 ) // y.bandwidth()
         .attr("fill", "#69b3a2")
         .on("mouseover", function(d, barData) {
-            // var tipx = 10 * i;
-            // var tipy = d3.select(this).attr("height");
-            d3.select(this).attr("r", 10).style("fill", "orange");
-            tooltip.attr("x", 2);
-            tooltip.attr("y", 2);
-            // tooltip.attr("dx", ((width/MAX_X) * barData.value) + 2);
-            // tooltip.attr("dy", y(barData.value) + 5);
-            tooltip.style("visibility", "visible");
-            tooltip.style("fill", "black");
-            tooltip.text(`${barData.value}: ${barData.names.join(', ')}`);
+          // var tipx = 10 * i;
+          // var tipy = d3.select(this).attr("height");
+          d3.select(this).attr("r", 10).style("fill", "orange");
+          tooltip.attr("x", 2);
+          tooltip.attr("y", 2);
+          // tooltip.attr("dx", ((width/MAX_X) * barData.value) + 2);
+          // tooltip.attr("dy", y(barData.value) + 5);
+          tooltip.style("visibility", "visible");
+          tooltip.style("fill", "black");
+          tooltip.text(`${stat} ${barData.value}: click to view characters.`);
+        })
+        .on("click", function(d, barData) {
+          var _selected = allCharacterData.filter((s) => { return barData.names.includes(s['Name']) });
+          var selected = [];
+          _selected.forEach((currectCharacter) => {
+            selected.push({ '_id': currectCharacter['_id'], 'name': currectCharacter['Name'] });
+          });
+          this.selectedCharacters = selected;
         })
         .on("mouseout", function() {
-            d3.select(this).attr("r", 10).style("fill", "#69b3a2");
-            tooltip.style("visibility", "hidden");
+          d3.select(this).attr("r", 10).style("fill", "#69b3a2");
+          tooltip.style("visibility", "hidden");
         });
+
+
     }
   }
 }
@@ -145,6 +173,11 @@ h3 {
 ul {
   list-style-type: none;
   padding: 0;
+}
+#matches {
+  display: flex;
+  flex-flow: row wrap;
+  overflow: hidden;
 }
 li {
   display: inline-block;

@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     hasKnownStats: function (characterStats) {
-      for (const stat of statsColumns){
+      for (const stat of statsColumns) {
         if(characterStats[stat] === '') {
           return false;
         }
