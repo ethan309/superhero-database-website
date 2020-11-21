@@ -20,15 +20,6 @@ import CharacterCard from '../components/CharacterCard.vue'
 import axios from 'axios';
 import { statsColumns } from '../constants.js';
 
-const hasKnownStats = (character) => {
-  statsColumns.forEach((stat) => {
-    if(typeof character[stat] === 'string' && character[stat].length === 0) {
-      return false;
-    }
-  });
-  return true;
-};
-
 export default {
   name: 'Home',
   components: {
@@ -45,21 +36,32 @@ export default {
     try {
       const characters = await axios.get(`/api/characters`);
       if(characters.status === 200) {
-        const allCharacters  = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
-          hasKnownStats(currectCharacter) ? 
+        const charactersWithStats = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
+          this.hasKnownStats(currectCharacter) ? 
             [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ] : 
             [ ...allFilteredCharacters],
           []
         );
-        this.suggestedCharacters = allCharacters.sort(() => Math.random() - 0.5).slice(0, 40);
+        this.suggestedCharacters = charactersWithStats.sort(() => Math.random() - 0.5).slice(0, 40);
         this.suggestedCharactersLoaded = true;
       } else {
         this.suggestedCharactersError = true;
       }
     } catch(exception) {
       this.suggestedCharactersError = true;
+      console.log(exception);
     }
   },
+  methods: {
+    hasKnownStats: function (characterStats) {
+      statsColumns.forEach((stat) => {
+        if(characterStats[stat] === '') {
+          return false;
+        }
+      });
+      return true;
+    }
+  }
 }
 </script>
 
