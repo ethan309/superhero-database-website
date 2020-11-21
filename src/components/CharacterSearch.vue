@@ -50,6 +50,7 @@ export default {
             this.characterName = this.query;
           } else {
             this.queryError = true;
+            console.log(`Request Status: ${characters.status}`);
           }
         } catch(exception) {
           console.log(exception);

@@ -36,16 +36,17 @@ export default {
     try {
       const characters = await axios.get(`/api/characters`);
       if(characters.status === 200) {
-        const charactersWithStats = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
-          this.hasKnownStats(currectCharacter) ? 
-            [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ] : 
-            [ ...allFilteredCharacters],
-          []
-        );
+        const charactersWithStats = []
+        characters.data.forEach((currectCharacter) => {
+          if(this.hasKnownStats(currectCharacter)) {
+            charactersWithStats.push({ '_id': currectCharacter['_id'], 'name': currectCharacter['Name'] });
+          }
+        });
         this.suggestedCharacters = charactersWithStats.sort(() => Math.random() - 0.5).slice(0, 40);
         this.suggestedCharactersLoaded = true;
       } else {
         this.suggestedCharactersError = true;
+        console.log(`Request Status: ${characters.status}`);
       }
     } catch(exception) {
       this.suggestedCharactersError = true;
