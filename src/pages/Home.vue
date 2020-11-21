@@ -1,7 +1,13 @@
 <template>
   <div id="app">
+  <div id="centercontent">
    <div v-show="suggestedCharactersError">
      <p class="error">Error loading suggested characters. Please try again.</p>
+   </div>
+   <div>
+   <div class="helptext">
+   <h1>Home</h1>
+   <h2>Explore some random super people:</h2>
    </div>
    <div v-show="suggestedCharactersLoaded" id="suggested-characters">
       <ul v-for="character in suggestedCharacters" v-bind:key="character.name">
@@ -55,11 +61,11 @@ export default {
   },
   methods: {
     hasKnownStats: function (characterStats) {
-      statsColumns.forEach((stat) => {
+      for (const stat of statsColumns){
         if(characterStats[stat] === '') {
           return false;
         }
-      });
+      }
       return true;
     }
   }
@@ -79,6 +85,7 @@ export default {
 #suggested-characters {
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
   max-height: 700px;
   overflow: hidden;
 }
@@ -91,5 +98,22 @@ li {
 }
 .error {
   color: red !important;
+}
+.helptext{
+  padding-top: 10px;
+  padding-left: 25px;
+  width: 100%;
+}
+
+#centercontent{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  margin-left: 25px;
+}
+
+h1 {
+  font-size: 75px;
 }
 </style>
