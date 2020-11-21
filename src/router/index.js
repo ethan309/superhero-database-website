@@ -5,6 +5,7 @@ import Search from '../pages/Search.vue'
 import Vs from '../pages/Vs.vue'
 import CharacterStats from '../pages/CharacterStats.vue'
 import Versus from '../pages/Versus.vue'
+import Explore from '../pages/Explore.vue'
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ let router = new Router({
         path: '/Versus/:id/:id',
         name: 'Versus',
         component: Versus
+    },
+    {
+        path: '/Explore',
+        name: 'Explore',
+        component: Explore
     }
   ]
 })

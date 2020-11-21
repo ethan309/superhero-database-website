@@ -42,7 +42,7 @@ export default {
       this.name = data['Name'];
 
       Object.entries(data).forEach(([key, entry]) => {
-        if(statsColumns.has(key) && entry.length > 0) {
+        if(statsColumns.has(key)) {
           this.stats.push({
             category: key,
             value: entry
