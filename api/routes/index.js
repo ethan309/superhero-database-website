@@ -12,9 +12,8 @@ client.connect(err => {
   console.log('Connected to Database');
 });
 
-router.get('/characters/:charName', function(req, res) {
-  let result;
-  result = client.db("Superheroes").collection("Character").find({Name: { '$regex': req.params.charName, '$options': 'i'}}).toArray()
+router.get('/api/characters/:charName', function(req, res) {
+  client.db("Superheroes").collection("Character").find({Name: { '$regex': req.params.charName, '$options': 'i'}}).toArray()
   .then(results => {
     console.log(results);
     res.send(results);
@@ -28,6 +27,13 @@ router.get('/api/id/:id', function(req, res) {
     console.log(results);
     res.send(results);
   });
+})
+
+router.get('/api/characters/', function(req, res) {
+  client.db("Superheroes").collection("Character").find().toArray()
+  .then(results => {
+    res.send(results);
+  })
 })
 
 router.get('/*', function(req, res, next) {
