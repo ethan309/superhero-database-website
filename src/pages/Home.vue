@@ -23,9 +23,9 @@ export default {
   data: function() {
     return {
       suggestedCharacters: [
-        { name: 'John Smith II', _id: '5fb18d26b2c29d1828817e26' },
-        { name: 'John Doe', _id: '1236' },
-        { name: 'Jane Doe', _id: '1235' },
+        { name: 'Abe Sapien', _id: '5fb5f3603e8e0b4910ea0d79' },
+        { name: 'Do not click me', _id: '1236' },
+        { name: 'Do not click me', _id: '1235' },
       ]
     };
   }
