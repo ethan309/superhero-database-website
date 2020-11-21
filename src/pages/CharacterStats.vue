@@ -1,6 +1,9 @@
 <template>
   <div class="stats">
     <h3>{{name}} (id: {{id}})</h3>
+    <div v-show="!resultsFound" class="error">
+      <p>There was an error loading data for the requested character. Please try again.</p>
+    </div>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="powers"></div>
   </div>
@@ -17,16 +20,20 @@ export default {
         id: this.$route.params.id,
         name: '',
         stats: [],
-        powers: []
+        powers: [],
+        resultsFound: false
       };
   },
-  mounted() {
-    axios
-      .get(`/api/id/${this.id}`)
-      .then((characterData) => {
-        this.parseCharacterData(characterData);
-        this.displayStatsGraph();
-      });
+  async mounted() {
+    const characterData = await axios.get(`/id/${this.id}`);
+    console.log(characterData);
+    if(characterData.status === 200) {
+      this.parseCharacterData(characterData.data);
+      this.displayStatsGraph();
+      this.resultsFound = true;
+    } else {
+      this.resultsFound = false;
+    }
   },
   methods: {
     parseCharacterData: function(data) {
@@ -53,7 +60,7 @@ export default {
 
       Object.entries(data).forEach(([key, entry]) => {
         if(statsColumns.has(key) && entry.length > 0) {
-          this.stats.append({
+          this.stats.push({
             category: key,
             value: entry
           });
@@ -61,6 +68,8 @@ export default {
       });
     },
     displayStatsGraph: function() {
+      const numericalStats = this.stats.filter((stat) => { return typeof stat.value === 'number' })
+
       const w = 500;
       const h = 500;
 
@@ -73,7 +82,7 @@ export default {
       // const sortedGDP = this.gdp.sort((a, b) => (a.value > b.value ? 1 : -1));
       const color = d3.scaleOrdinal(d3.schemeDark2);
 
-      const max_stats = d3.max(this.stats, o => o.value);
+      const max_stats = d3.max(numericalStats, o => o.value);
 
       const angleScale = d3
         .scaleLinear()
@@ -90,7 +99,7 @@ export default {
       const g = svg.append("g");
 
       g.selectAll("path")
-        .data(this.stats)
+        .data(numericalStats)
         .enter()
         .append("path")
         .attr("d", arc)
@@ -140,5 +149,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.error {
+  color: red;
 }
 </style>
