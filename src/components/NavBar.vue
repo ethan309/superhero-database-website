@@ -3,6 +3,7 @@
       <router-link id='home' to="/Home">
         <img alt="Main logo" src="../assets/main.png">
       </router-link>
+      <h1>Superpeople database website</h1>
       <ul>
         <router-link class="link" to="/Search">
           <img class="link-img" alt="Search" src="../assets/query.svg"><br>
@@ -33,7 +34,11 @@ export default {
 
 <style scoped>
 #NavBar {
-  background-color: rgba(165, 227, 243, 0.9);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  background-color: rgba(165, 227, 243);
   position: fixed;
   top: 0px;
   left: 0px;
@@ -42,21 +47,19 @@ export default {
 }
 #home {
   float: left;
-  display: block;
   padding: 10px;
 }
 .link {
   color: #42b983;
   float: right;
-  display: block;
   padding: 10px;
   align-self: center;
 }
 ul {
-  display: inline;
-  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   text-align: center;
-  padding-right: 100px;
 }
 img {
   height: 100px;
@@ -67,6 +70,13 @@ img {
   height: 70px;
   object-fit: contain;
   align-self: center;
+}
+h1 {
+  height: 100px;  
+  margin: 0px;
+  padding: 0px;
+  margin-top: 35px;
+  font-size: 50px;
 }
 
 </style>
