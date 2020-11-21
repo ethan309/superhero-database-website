@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'routes')));
 app.use('/routes/superhero-database-website/css', express.static(path.join(__dirname, '/routes/superhero-database-website/css')));
 app.use('/routes/superhero-database-website/js', express.static(path.join(__dirname, '/routes/superhero-database-website/js')));
 app.use('/routes/superhero-database-website/img', express.static(path.join(__dirname, '/routes/superhero-database-website/img')));
+app.disable('etag');
 
 app.use(logger('dev'));
 app.use(cors());

@@ -17,8 +17,6 @@ let router = new Router({
         name: 'Home',
         component: Home
     },
-    { path: '/api', // Ignore or pass on to server
-    },
     {
         path: '/',
         name: 'Home',

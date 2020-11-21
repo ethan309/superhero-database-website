@@ -11,10 +11,6 @@ client.connect(err => {
   if (err) return console.error(err)
   console.log('Connected to Database');
 });
-/* GET home page. */
-router.get('/*', function(req, res, next) {
-  res.sendFile(__dirname + '/index.html'); 
-});
 
 router.get('/characters/:charName', function(req, res) {
   let result;
@@ -33,5 +29,9 @@ router.get('/api/id/:id', function(req, res) {
     res.send(results);
   });
 })
+
+router.get('/*', function(req, res, next) {
+  res.sendFile(__dirname + '/index.html'); 
+});
 
 module.exports = router;

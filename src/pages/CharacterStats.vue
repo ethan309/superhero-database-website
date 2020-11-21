@@ -25,7 +25,7 @@ export default {
       };
   },
   async mounted() {
-    const characterData = await axios.get(`/id/${this.id}`);
+    const characterData = await axios.get(`/api/id/${this.id}`);
     console.log(characterData);
     if(characterData.status === 200) {
       this.parseCharacterData(characterData.data);
