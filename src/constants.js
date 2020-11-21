@@ -13,6 +13,24 @@ const publishers = {
     marvel: 'Marvel Comics'
 };
 
+const statsColumns = new Set([
+    "Alignment",
+    "Gender",
+    "Eyecolor",
+    "Race",
+    "Haircolor",
+    "Publisher",
+    "Skincolor",
+    "Height",
+    "Weight",
+    "Intelligence",
+    "Strength",
+    "Speed",
+    "Durability",
+    "Power",
+    "Combat"
+]);
+
 const UNKNOWN = '';
 
-module.exports = { alignments, genders, publishers, UNKNOWN };
+module.exports = { alignments, genders, publishers, UNKNOWN, statsColumns };

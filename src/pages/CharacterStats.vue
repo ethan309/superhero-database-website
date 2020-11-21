@@ -12,6 +12,7 @@
 <script>
 import * as d3 from 'd3';
 import axios from 'axios';
+import { statsColumns } from '../constants.js';
 
 export default {
   name: 'CharacterStats',
@@ -39,24 +40,6 @@ export default {
     parseCharacterData: function(data) {
       this.powers = data['Powers'] !== undefined ? data['Powers'].slice(0) : [];
       this.name = data['Name'];
-
-      const statsColumns = new Set([
-        "Alignment",
-        "Gender",
-        "Eyecolor",
-        "Race",
-        "Haircolor",
-        "Publisher",
-        "Skincolor",
-        "Height",
-        "Weight",
-        "Intelligence",
-        "Strength",
-        "Speed",
-        "Durability",
-        "Power",
-        "Combat"
-      ]);
 
       Object.entries(data).forEach(([key, entry]) => {
         if(statsColumns.has(key) && entry.length > 0) {
@@ -149,8 +132,5 @@ li {
 }
 a {
   color: #42b983;
-}
-.error {
-  color: red;
 }
 </style>

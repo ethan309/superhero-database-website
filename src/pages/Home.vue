@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-   <div id="suggested-characters">
+   <div v-show="suggestedCharactersError">
+     <p class="error">Error loading suggested characters. Please try again.</p>
+   </div>
+   <div v-show="suggestedCharactersLoaded" id="suggested-characters">
       <ul v-for="character in suggestedCharacters" v-bind:key="character.name">
         <li>
           <router-link v-bind:to="{ name: 'Details', params: { id: character._id }}">
@@ -15,6 +18,16 @@
 <script>
 import CharacterCard from '../components/CharacterCard.vue'
 import axios from 'axios';
+import { statsColumns } from '../constants.js';
+
+const hasKnownStats = (character) => {
+  statsColumns.forEach((stat) => {
+    if(typeof character[stat] === 'string' && character[stat].length === 0) {
+      return false;
+    }
+  });
+  return true;
+};
 
 export default {
   name: 'Home',
@@ -23,20 +36,24 @@ export default {
   },
   data: function() {
     return {
-      suggestedCharacters: []
+      suggestedCharacters: [],
+      suggestedCharactersLoaded: false,
+      suggestedCharactersError: false
     };
   },
   async mounted() {
     const characters = await axios.get(`/api/characters`);
     if(characters.status === 200) {
-      this.suggestedCharacters = Object.keys(characters.data)
-        .filter(key => ['_id', 'name'].includes(key))
-        .reduce((obj, key) => {
-          return {
-            ...obj,
-            [key]: characters.data[key]
-          };
-        }, {});
+      const allCharacters  = characters.data.reduce((allFilteredCharacters, currectCharacter) => 
+        hasKnownStats(currectCharacter) ? 
+          [ ...allFilteredCharacters, {'_id': currectCharacter['_id'], 'name': currectCharacter['Name']} ] : 
+          [ ...allFilteredCharacters],
+        []
+      );
+      this.suggestedCharacters = allCharacters.sort(() => Math.random() - 0.5).slice(0, 40);
+      this.suggestedCharactersLoaded = true;
+    } else {
+      this.suggestedCharactersError = true;
     }
   },
 }
@@ -55,6 +72,8 @@ export default {
 #suggested-characters {
   display: flex;
   flex-flow: row wrap;
+  max-height: 700px;
+  overflow: hidden;
 }
 ul {
   padding-left: 0;
@@ -62,5 +81,8 @@ ul {
 li {
   list-style-type: none;
   padding: 10px 10px;
+}
+.error {
+  color: red !important;
 }
 </style>
