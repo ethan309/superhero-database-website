@@ -72,7 +72,6 @@ export default {
 #matches {
   display: flex;
   flex-flow: row wrap;
-  max-height: 700px;
   overflow: hidden;
 }
 </style>

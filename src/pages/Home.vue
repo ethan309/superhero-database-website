@@ -22,7 +22,14 @@ import { statsColumns } from '../constants.js';
 
 const hasKnownStats = (character) => {
   statsColumns.forEach((stat) => {
-    if(typeof character[stat] === 'string' && character[stat].length === 0) {
+    if(
+        typeof character[stat] === 'string' && 
+        (
+          character[stat].length === 0 ||
+          character[stat] === 'TRUE' ||
+          character[stat] === 'FALSE'
+        )
+    ) {
       return false;
     }
   });

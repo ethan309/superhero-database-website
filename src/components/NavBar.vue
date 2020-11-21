@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 #NavBar {
-  background-color: blanchedalmond;
+  background-color: rgba(165, 227, 243, 0.9);
   position: fixed;
   top: 0px;
   left: 0px;
