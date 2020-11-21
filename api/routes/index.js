@@ -12,7 +12,7 @@ client.connect(err => {
   console.log('Connected to Database');
 });
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/*', function(req, res, next) {
   res.sendFile(__dirname + '/index.html'); 
 });
 
@@ -25,7 +25,7 @@ router.get('/characters/:charName', function(req, res) {
   });
 })
 
-router.get('/id/:id', function(req, res) {
+router.get('/api/id/:id', function(req, res) {
   const id = new ObjectId(req.params.id);
   client.db("Superheroes").collection("Character").findOne({_id: id})
   .then(results => {

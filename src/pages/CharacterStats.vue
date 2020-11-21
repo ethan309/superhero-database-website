@@ -22,7 +22,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`/id/${this.id}`)
+      .get(`/api/id/${this.id}`)
       .then((characterData) => {
         this.parseCharacterData(characterData);
         this.displayStatsGraph();

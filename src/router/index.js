@@ -4,17 +4,20 @@ import Home from '../pages/Home.vue'
 import Search from '../pages/Search.vue'
 import Vs from '../pages/Vs.vue'
 import CharacterStats from '../pages/CharacterStats.vue'
-
+import Versus from '../pages/Versus.vue'
 
 Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
+  base: '/',
   routes: [
     {
         path: '/Home',
         name: 'Home',
         component: Home
+    },
+    { path: '/api', // Ignore or pass on to server
     },
     {
         path: '/',
@@ -35,6 +38,11 @@ let router = new Router({
         path: '/Details/:id',
         name: 'Details',
         component: CharacterStats
+    },
+    {
+        path: '/Versus/:id/:id',
+        name: 'Versus',
+        component: Versus
     }
   ]
 })
