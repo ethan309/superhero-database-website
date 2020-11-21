@@ -35,7 +35,7 @@ a {
   width: 100px;
   height: 125px;
   padding: 80px 50px;
-  background-color: #74717e;
+  background: linear-gradient(45deg, rgba(4,143,242,1) 0%, rgba(54,73,219,1) 30%, rgba(70,84,252,1) 46%, rgba(31,39,173,1) 70%, rgba(1,0,255,1) 80%);
   border-radius: 10px;
   margin: 5px;
   position: relative;
