@@ -48,6 +48,13 @@ router.get('/api/haspower/:powerone/:powertwo'), function(req, res) {
   })
 }
 
+router.get('/api/powers', function(req, res) {
+  client.db("Superheroes").collection("Character").distinct("Powers")
+  .then( results => {
+    res.send(results);
+  })
+})
+
 router.get('/*', function(req, res, next) {
   res.sendFile(__dirname + '/index.html'); 
 });
