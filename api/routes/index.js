@@ -30,41 +30,30 @@ router.get('/api/id/:id', function(req, res) {
 })
 
 router.get('/api/characters/', function(req, res) {
+  console.log("asdf");
   client.db("Superheroes").collection("Character").find().toArray()
   .then(results => {
     res.send(results);
-  })
+  });
 })
 
-router.get('/api/haspower/:powerone/:powertwo', function(req, res) {
-  let params = []
-  params.push(req.params.powerone);
-  if (req.params.powertwo) {
-    params.push(req.params.powertwo)
-  }
-  client.db("Superheroes").collection("Character").countDocuments({ $expr: { Powers: { $all: params}} })
-  .then( results => {
-    res.send(results);
-  })
-})
-
-router.get('/api/haspowertwo/:powerone/:powertwo', function(req, res) {
-  let params = []
-  params.push(req.params.powerone);
-  if (req.params.powertwo) {
-    params.push(req.params.powertwo)
+router.get('/api/haspower', function(req, res) {
+  let params = [];
+  params.push(req.query.powerone);
+  if (req.query.powertwo) {
+    params.push(req.query.powertwo)
   }
   client.db("Superheroes").collection("Character").countDocuments({ Powers: { $all: params}})
-  .then( results => {
-    res.send(results);
-  })
+  .then(results => {
+    res.send(String(results));
+  });
 })
 
 router.get('/api/powers', function(req, res) {
   client.db("Superheroes").collection("Character").distinct("Powers")
   .then( results => {
     res.send(results);
-  })
+  });
 })
 
 router.get('/*', function(req, res, next) {
