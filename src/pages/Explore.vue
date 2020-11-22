@@ -70,8 +70,6 @@ export default {
     displayGraph: function(stat) {
       // remove old graph
       d3.select("#stats").selectAll("svg").remove();
-      d3.select("#details").selectAll("svg").remove();
-      d3.select("#matches").selectAll("svg").remove();
       this.selectedCharacters = [];
 
       // display new graph
@@ -79,39 +77,91 @@ export default {
       else { this.displayStatsGraph(stat); }
     },
     displayPowersGraph: function() {
-      var sets = [ {sets: ['A'], size: 12}, 
-             {sets: ['B'], size: 12},
-             {sets: ['A','B'], size: 2}];
+      const singlePowers = [];
+      this.data.forEach((currentCharacter) => {
+        currentCharacter['Powers'].forEach((currentPower) => {
+          const existing = singlePowers.findIndex((entry) => entry['sets'] === [currentPower]);
+          if(existing === -1) {
+            singlePowers.push({ 'sets': [currentPower], 'size': 1 });
+          } else {
+            singlePowers[existing]['size'] += 1;
+          }
+        });
+      });
+
+      const combinedPowers = [];
+      singlePowers.forEach((firstPower) => {
+        singlePowers.forEach((secondPower) => {
+          if(firstPower !== secondPower) {
+            const existing = combinedPowers.findIndex((entry) => entry['sets'].includes(firstPower) && entry['sets'].includes(secondPower));
+            if(existing === -1) {
+              combinedPowers.push({ 'sets': [firstPower, secondPower], 'size': 1 });
+            } else {
+              combinedPowers[existing]['size'] += 1;
+            }
+          }
+        });
+      });
+
+      var sets = new Set([
+        ...singlePowers,
+        ...combinedPowers
+      ]);
 
       var chart = venn.VennDiagram();
 
       d3.select("#stats").datum(sets).call(chart);
+      var tooltip = d3.select("body").append("div")
+        .attr("class", "venntooltip");
 
       var colours = ['black', 'red', 'blue', 'green'];
 
       d3.selectAll("#stats .venn-circle path")
-          .style("fill-opacity", 0)
-          .style("stroke-width", 10)
-          .style("stroke-opacity", .5)
-          .style("stroke", function(d,i) { return colours[i]; });
+        .style("fill-opacity", 0)
+        .style("stroke-width", 10)
+        .style("stroke-opacity", .5)
+        .style("stroke", function(d, i) { return colours[i]; });
 
       d3.selectAll("#stats .venn-circle text")
-          .style("fill", function(d,i) { return colours[i]})
-          .style("font-size", "24px")
-          .style("font-weight", "100");
+        .style("fill", function(d, i) { return colours[i] })
+        .style("font-size", "24px")
+        .style("font-weight", "100");
       
       d3.selectAll("#stats .venn-circle")
-        .on("mouseover", function() {
-            var node = d3.select(this).transition();
-            node.select("path").style("fill-opacity", .2);
-            node.select("text").style("font-weight", "100")
-                              .style("font-size", "36px");
+        .on("mouseover", function(d) {
+          var node = d3.select(this).transition();
+          node.select("path").style("fill-opacity", .2);
+          node.select("text").style("font-weight", "100")
+            .style("font-size", "36px");
+          // sort all the areas relative to the current item
+          venn.sortAreas(chart, d);
+
+          // Display a tooltip with the current size
+          tooltip.transition().duration(400).style("opacity", .9);
+          tooltip.text(d.size + " users");
+          
+          // highlight the current path
+          var selection = d3.select(this).transition("tooltip").duration(400);
+          selection.select("path")
+            .style("stroke-width", 3)
+            .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+            .style("stroke-opacity", 1);
         })
-        .on("mouseout", function() {
-            var node = d3.select(this).transition();
-            node.select("path").style("fill-opacity", 0);
-            node.select("text").style("font-weight", "100")
-                              .style("font-size", "24px");
+        .on("mousemove", function() {
+          tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+          var node = d3.select(this).transition();
+          node.select("path").style("fill-opacity", 0);
+          node.select("text").style("font-weight", "100")
+            .style("font-size", "24px");
+          tooltip.transition().duration(400).style("opacity", 0);
+          var selection = d3.select(this).transition("tooltip").duration(400);
+          selection.select("path")
+            .style("stroke-width", 0)
+            .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+            .style("stroke-opacity", 0);
         });
     },
     displayStatsGraph: function(stat) {
