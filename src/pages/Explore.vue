@@ -4,10 +4,13 @@
       <option v-for="option in statOptions" v-bind:key="option" v-bind:value="option">{{option}}</option>
     </select>
     <div v-show="error" class="error">
-      <p>There was an error loading data for the requested character. Please try again.</p>
+      <p>There was an error loading data for the requested graph. Please try again or select a different graph.</p>
     </div>
     <div v-show="!error && !resultsFound">
       <p>Compiling character data...</p>
+    </div>
+    <div v-show="working">
+      <p>Generating graph. Hang on, this may take a minute...</p>
     </div>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="details"></div>
@@ -26,6 +29,7 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import * as venn from 'venn.js';
 import CharacterCard from '../components/CharacterCard.vue';
+import { powerCache } from '../characterPowersCache.js';
 
 export default {
   name: 'Explore',
@@ -37,6 +41,7 @@ export default {
         data: [],
         resultsFound: false,
         error: false,
+        working: false,
         statOptions: [
           'Height',
           'Weight',
@@ -47,7 +52,8 @@ export default {
           'Combat',
           'Powers'
         ],
-        selectedCharacters: []
+        selectedCharacters: [],
+        LIMIT_POWERS: false
       };
   },
   async mounted() {
@@ -55,8 +61,8 @@ export default {
     
     if(characterData.status === 200) {
       this.parseCharacterData(characterData.data);
-      this.displayGraph(this.statOptions[0]);
       this.resultsFound = true;
+      this.displayGraph(this.statOptions[0]);
       this.error = false;
     } else {
       this.resultsFound = false;
@@ -73,111 +79,123 @@ export default {
       d3.select("#details").selectAll("svg").remove();
       this.selectedCharacters = [];
 
-      // display new graph
-      if(stat === 'Powers') { this.displayPowersGraph(); }
-      else { this.displayStatsGraph(stat); }
+      try {
+        // display new graph
+        this.working = true;
+        if(stat === 'Powers') { this.displayPowersGraph(); }
+        else { this.displayStatsGraph(stat); }
+        this.working = false;
+      } catch(exception) {
+        console.log(exception);
+        this.error = true;
+        this.working = false;
+      }
     },
     displayPowersGraph: async function() {
-      const _possiblePowers = await axios.get(`/api/powers`);
-      const possiblePowers = _possiblePowers.data;
-      console.log('1');
-      console.log(_possiblePowers);
-      console.log('1..');
-      console.log(possiblePowers);
+      // const _possiblePowers = await axios.get(`/api/powers`);
+      // var possiblePowers = _possiblePowers.data;
+      // if(this.LIMIT_POWERS) {
+      //   possiblePowers = possiblePowers.sort(() => Math.random() - 0.5).slice(0, 5);
+      // }
+      // console.log('1');
+      // console.log(_possiblePowers);
+      // console.log('1..');
+      // console.log(possiblePowers);
 
-      const singlePowers = [];
-      for(var p = 0; p < possiblePowers.length; p++) {
-        const power = possiblePowers[p];
-        const _matches = await axios.get(`/api/haspower?powerone=${power}`);
-        const matches = _matches.data;
-        singlePowers.push({ 'sets': [power], 'size': matches });
-        if(p < 5) {
-          console.log('1a');
-          console.log(`${power}: ${matches}`);
+      // const singlePowers = [];
+      // for(var p = 0; p < possiblePowers.length; p++) {
+      //   const power = possiblePowers[p];
+      //   const _matches = await axios.get(`/api/haspower?powerone=${power}`);
+      //   const matches = _matches.data;
+      //   singlePowers.push({ 'sets': [power], 'size': matches });
+      //   if(p < 5) {
+      //     console.log('1a');
+      //     console.log(`${power}: ${matches}`);
+      //   }
+      // }
+      // console.log('2');
+      // console.log(singlePowers);
+
+      // const combinedPowers = [];
+      // for(var p1 = 0; p1 < possiblePowers.length; p1++) {
+      //   for (var p2 = p1 + 1; p2 < possiblePowers.length; p2++) {
+      //     const power1 = possiblePowers[p1];
+      //     const power2 = possiblePowers[p2];
+      //     const _matches = await axios.get(`/api/haspower?powerone=${power1}&powertwo=${power2}`);
+      //     const matches = _matches.data;
+      //     combinedPowers.push({ 'sets': [power1, power2], 'size': matches });
+      //     if(p1 < 5 && p2 < 5) {
+      //       console.log('2a');
+      //       console.log(`${power1}, ${power2}: ${matches}`);
+      //     }
+      //   }
+      // }
+      // console.log('3');
+      // console.log(combinedPowers);
+      try {
+        console.log('1');
+        var chart = venn.VennDiagram();
+        console.log('2');
+        d3.select("#stats").datum(powerCache.slice(0, 5)).call(chart);
+        console.log('2pre-a');
+        var tooltip = d3.select("body").append("div")
+          .attr("class", "venntooltip");
+        console.log('2a');
+        var colors = ['black', 'red', 'blue', 'green', 'yellow', 'purple'];
+        console.log('2b');
+        d3.selectAll("#stats .venn-circle path")
+          .style("fill-opacity", 0)
+          .style("stroke-width", 10)
+          .style("stroke-opacity", .5)
+          .style("stroke", function(d, i) { return colors[i % colors.length]; });
+        console.log('3');
+        d3.selectAll("#stats .venn-circle text")
+          .style("fill", function(d, i) { return colors[i % colors.length] })
+          .style("font-size", "24px")
+          .style("font-weight", "100");
+        console.log('4');
+        d3.selectAll("#stats .venn-circle")
+          .on("mouseover", function(d) {
+            var node = d3.select(this).transition();
+            node.select("path").style("fill-opacity", .2);
+            node.select("text").style("font-weight", "100")
+              .style("font-size", "36px");
+            // sort all the areas relative to the current item
+            venn.sortAreas(chart, d);
+
+            // Display a tooltip with the current size
+            tooltip.transition().duration(400).style("opacity", .9);
+            tooltip.text(d.size + " users");
+            
+            // highlight the current path
+            var selection = d3.select(this).transition("tooltip").duration(400);
+            selection.select("path")
+              .style("stroke-width", 3)
+              .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+              .style("stroke-opacity", 1);
+          })
+          .on("mousemove", function() {
+            tooltip.style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY - 28) + "px");
+          })
+          .on("mouseout", function(d) {
+            var node = d3.select(this).transition();
+            node.select("path").style("fill-opacity", 0);
+            node.select("text").style("font-weight", "100")
+              .style("font-size", "24px");
+            tooltip.transition().duration(400).style("opacity", 0);
+            var selection = d3.select(this).transition("tooltip").duration(400);
+            selection.select("path")
+              .style("stroke-width", 0)
+              .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+              .style("stroke-opacity", 0);
+          });
+          console.log('5');
+        } catch(exception) {
+          console.log(exception);
+          this.error = true;
+          this.working = false;
         }
-      }
-      console.log('2');
-      console.log(singlePowers);
-
-      const combinedPowers = [];
-      for(var p1 = 0; p1 < possiblePowers.length; p1++) {
-        for (var p2 = p1 + 1; p2 < possiblePowers.length; p2++) {
-          const power1 = possiblePowers[p1];
-          const power2 = possiblePowers[p2];
-          const _matches = await axios.get(`/api/haspower?powerone=${power1}&powertwo=${power2}`);
-          const matches = _matches.data;
-          singlePowers.push({ 'sets': [power1, power2], 'size': matches });
-          if(p1 < 5 && p2 < 5) {
-            console.log('2a');
-            console.log(`${power1}, ${power2}: ${matches}`);
-          }
-        }
-      }
-      console.log('3');
-      console.log(combinedPowers);
-
-      var sets = new Set([
-        ...singlePowers,
-        ...combinedPowers
-      ]);
-      console.log('4');
-      console.log(sets);
-
-      var chart = venn.VennDiagram();
-
-      d3.select("#stats").datum(sets).call(chart);
-      var tooltip = d3.select("body").append("div")
-        .attr("class", "venntooltip");
-
-      var colors = ['black', 'red', 'blue', 'green', 'yellow', 'purple'];
-
-      d3.selectAll("#stats .venn-circle path")
-        .style("fill-opacity", 0)
-        .style("stroke-width", 10)
-        .style("stroke-opacity", .5)
-        .style("stroke", function(d, i) { return colors[i % colors.length]; });
-
-      d3.selectAll("#stats .venn-circle text")
-        .style("fill", function(d, i) { return colors[i % colors.length] })
-        .style("font-size", "24px")
-        .style("font-weight", "100");
-      
-      d3.selectAll("#stats .venn-circle")
-        .on("mouseover", function(d) {
-          var node = d3.select(this).transition();
-          node.select("path").style("fill-opacity", .2);
-          node.select("text").style("font-weight", "100")
-            .style("font-size", "36px");
-          // sort all the areas relative to the current item
-          venn.sortAreas(chart, d);
-
-          // Display a tooltip with the current size
-          tooltip.transition().duration(400).style("opacity", .9);
-          tooltip.text(d.size + " users");
-          
-          // highlight the current path
-          var selection = d3.select(this).transition("tooltip").duration(400);
-          selection.select("path")
-            .style("stroke-width", 3)
-            .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
-            .style("stroke-opacity", 1);
-        })
-        .on("mousemove", function() {
-          tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px");
-        })
-        .on("mouseout", function(d) {
-          var node = d3.select(this).transition();
-          node.select("path").style("fill-opacity", 0);
-          node.select("text").style("font-weight", "100")
-            .style("font-size", "24px");
-          tooltip.transition().duration(400).style("opacity", 0);
-          var selection = d3.select(this).transition("tooltip").duration(400);
-          selection.select("path")
-            .style("stroke-width", 0)
-            .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
-            .style("stroke-opacity", 0);
-        });
     },
     displayStatsGraph: function(stat) {
       const data = [];

@@ -30,7 +30,6 @@ router.get('/api/id/:id', function(req, res) {
 })
 
 router.get('/api/characters/', function(req, res) {
-  console.log("asdf");
   client.db("Superheroes").collection("Character").find().toArray()
   .then(results => {
     res.send(results);
