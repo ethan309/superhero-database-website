@@ -31,6 +31,24 @@ const statsColumns = new Set([
     "Combat"
 ]);
 
+const powerStats = new Set([
+    "Intelligence",
+    "Strength",
+    "Speed",
+    "Durability",
+    "Power",
+    "Combat"
+])
+
+const powerColors = [
+    "purple",
+    "blue",
+    "red",
+    "yellow",
+    "grey",
+    "orange"
+]
+
 const UNKNOWN = '';
 
-module.exports = { alignments, genders, publishers, UNKNOWN, statsColumns };
+module.exports = { alignments, genders, publishers, UNKNOWN, statsColumns, powerStats, powerColors };
