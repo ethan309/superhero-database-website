@@ -3,8 +3,11 @@
     <select v-on:change="displayStatsGraph($event.target.value)" name="Options" id="statOptions">
       <option v-for="option in statOptions" v-bind:key="option" v-bind:value="option">{{option}}</option>
     </select>
-    <div v-show="!resultsFound" class="error">
+    <div v-show="error" class="error">
       <p>There was an error loading data for the requested character. Please try again.</p>
+    </div>
+    <div v-show="!error && !resultsFound">
+      <p>Compiling character data...</p>
     </div>
     <div v-show="resultsFound" id="stats"></div>
     <div v-show="resultsFound" id="details"></div>
@@ -21,13 +24,18 @@
 <script>
 import * as d3 from 'd3';
 import axios from 'axios';
+import CharacterCard from '../components/CharacterCard.vue';
 
 export default {
   name: 'Explore',
+  components: {
+    CharacterCard
+  },
   data: function() {
     return {
         data: [],
         resultsFound: false,
+        error: false,
         statOptions: [
           'Height',
           'Weight',
@@ -47,8 +55,10 @@ export default {
       this.parseCharacterData(characterData.data);
       this.displayStatsGraph(this.statOptions[0]);
       this.resultsFound = true;
+      this.error = false;
     } else {
       this.resultsFound = false;
+      this.error = true;
     }
   },
   methods: {
@@ -125,7 +135,7 @@ export default {
         .style("width", `${width}px`)
         .style("overflow-wrap", "break-word");
 
-      const allCharacterData = this.data.slice(0);
+      const vm = this;
 
       //Bars
       svg.selectAll("myRect")
@@ -134,7 +144,7 @@ export default {
         .append("rect")
         .attr("x", x(0) )
         .attr("y", function(d) { return y(`${d.value} (${d.names.length} names)`); })
-        .attr("width", function(d) { return x(d.value); })
+        .attr("width", function(d) { return x(d.value < 1 ? 1 : d.value); })
         .attr("height", 10 ) // y.bandwidth()
         .attr("fill", "#69b3a2")
         .on("mouseover", function(d, barData) {
@@ -147,15 +157,14 @@ export default {
           // tooltip.attr("dy", y(barData.value) + 5);
           tooltip.style("visibility", "visible");
           tooltip.style("fill", "black");
-          tooltip.text(`${stat} ${barData.value}: click to view characters.`);
+          tooltip.text(`${stat} ${barData.value}: ${barData.names.length} characters.`);
         })
         .on("click", function(d, barData) {
-          var _selected = allCharacterData.filter((s) => { return barData.names.includes(s['Name']) });
-          var selected = [];
-          _selected.forEach((currectCharacter) => {
-            selected.push({ '_id': currectCharacter['_id'], 'name': currectCharacter['Name'] });
+          var selected = vm.data.filter((s) => { return barData.names.includes(s['Name']) });
+          selected.forEach((currectCharacter) => {
+            vm.selectedCharacters.push({ '_id': currectCharacter['_id'], 'name': currectCharacter['Name'] });
           });
-          this.selectedCharacters = selected;
+          console.log(vm.selectedCharacters);
         })
         .on("mouseout", function() {
           d3.select(this).attr("r", 10).style("fill", "#69b3a2");
