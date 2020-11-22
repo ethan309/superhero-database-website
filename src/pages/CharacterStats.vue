@@ -57,7 +57,7 @@ export default {
       this.characterData = characterData.data;
       this.parseCharacterData(characterData.data);
       this.displayStatsGraph();
-      console.log(this.characterData);
+
     } else {
       this.resultsFound = false;
     }
