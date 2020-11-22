@@ -1,6 +1,10 @@
 # Superhero, Supervillain, & Character Database
 CSCE 411 (Data Modeling) Final Project
 
+View our site at: http://csce411final.us-east-2.elasticbeanstalk.com/Home
+
+Or run locally:
+
 ## Project Setup
 ```
 yarn install
@@ -13,7 +17,14 @@ yarn serve
 
 ### Compiles and Minifies for Production
 ```
-yarn build
+yarn install
+deploy.sh
+```
+
+### Run site with backend
+```
+yarn install
+deploy.sh
 ```
 
 ### Lints and Fixes Files
