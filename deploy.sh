@@ -27,6 +27,9 @@ cd api
 # install dependencies
 npm install
 
+# localhost:9000 message
+echo "Go to localhost:9000"
+
 # start server
 npm start
 
