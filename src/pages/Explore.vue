@@ -70,6 +70,7 @@ export default {
     displayGraph: function(stat) {
       // remove old graph
       d3.select("#stats").selectAll("svg").remove();
+      d3.select("#details").selectAll("svg").remove();
       this.selectedCharacters = [];
 
       // display new graph
