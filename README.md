@@ -13,11 +13,13 @@ yarn serve
 
 ### Compiles and Minifies for Production
 ```
+yarn install
 deploy.sh
 ```
 
 ### Run site with backend
 ```
+yarn install
 deploy.sh
 ```
 
