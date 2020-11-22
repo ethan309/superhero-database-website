@@ -88,7 +88,7 @@ export default {
       const singlePowers = [];
       for(var p = 0; p < possiblePowers.length; p++) {
         const power = possiblePowers[p];
-        const _matches = await axios.get(`/api/haspowertwo/${power}`);
+        const _matches = await axios.get(`/api/haspower?powerone=${power}`);
         const matches = _matches.data;
         singlePowers.push({ 'sets': [power], 'size': matches });
         if(p < 5) {
@@ -104,7 +104,7 @@ export default {
         for (var p2 = p1 + 1; p2 < possiblePowers.length; p2++) {
           const power1 = possiblePowers[p1];
           const power2 = possiblePowers[p2];
-          const _matches = await axios.get(`/api/haspowertwo/${power1}/${power2}`);
+          const _matches = await axios.get(`/api/haspower?powerone=${power1}&powertwo=${power2}`);
           const matches = _matches.data;
           singlePowers.push({ 'sets': [power1, power2], 'size': matches });
           if(p1 < 5 && p2 < 5) {
