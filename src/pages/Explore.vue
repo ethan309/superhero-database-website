@@ -1,6 +1,6 @@
 <template>
   <div class="stats">
-    <select v-on:change="displayStatsGraph($event.target.value)" name="Options" id="statOptions">
+    <select v-on:change="displayGraph($event.target.value)" name="Options" id="statOptions">
       <option v-for="option in statOptions" v-bind:key="option" v-bind:value="option">{{option}}</option>
     </select>
     <div v-show="error" class="error">
@@ -24,6 +24,7 @@
 <script>
 import * as d3 from 'd3';
 import axios from 'axios';
+import * as venn from 'venn.js';
 import CharacterCard from '../components/CharacterCard.vue';
 
 export default {
@@ -43,7 +44,8 @@ export default {
           'Strength',
           'Speed',
           'Durability',
-          'Combat'
+          'Combat',
+          'Powers'
         ],
         selectedCharacters: []
       };
@@ -53,7 +55,7 @@ export default {
     
     if(characterData.status === 200) {
       this.parseCharacterData(characterData.data);
-      this.displayStatsGraph(this.statOptions[0]);
+      this.displayGraph(this.statOptions[0]);
       this.resultsFound = true;
       this.error = false;
     } else {
@@ -64,6 +66,53 @@ export default {
   methods: {
     parseCharacterData: function(data) {
       this.data = data;
+    },
+    displayGraph: function(stat) {
+      // remove old graph
+      d3.select("#stats").selectAll("svg").remove();
+      d3.select("#details").selectAll("svg").remove();
+      d3.select("#matches").selectAll("svg").remove();
+      this.selectedCharacters = [];
+
+      // display new graph
+      if(stat === 'Powers') { this.displayPowersGraph(); }
+      else { this.displayStatsGraph(stat); }
+    },
+    displayPowersGraph: function() {
+      var sets = [ {sets: ['A'], size: 12}, 
+             {sets: ['B'], size: 12},
+             {sets: ['A','B'], size: 2}];
+
+      var chart = venn.VennDiagram();
+
+      d3.select("#stats").datum(sets).call(chart);
+
+      var colours = ['black', 'red', 'blue', 'green'];
+
+      d3.selectAll("#stats .venn-circle path")
+          .style("fill-opacity", 0)
+          .style("stroke-width", 10)
+          .style("stroke-opacity", .5)
+          .style("stroke", function(d,i) { return colours[i]; });
+
+      d3.selectAll("#stats .venn-circle text")
+          .style("fill", function(d,i) { return colours[i]})
+          .style("font-size", "24px")
+          .style("font-weight", "100");
+      
+      d3.selectAll("#stats .venn-circle")
+        .on("mouseover", function() {
+            var node = d3.select(this).transition();
+            node.select("path").style("fill-opacity", .2);
+            node.select("text").style("font-weight", "100")
+                              .style("font-size", "36px");
+        })
+        .on("mouseout", function() {
+            var node = d3.select(this).transition();
+            node.select("path").style("fill-opacity", 0);
+            node.select("text").style("font-weight", "100")
+                              .style("font-size", "24px");
+        });
     },
     displayStatsGraph: function(stat) {
       const data = [];
@@ -90,9 +139,6 @@ export default {
       var margin = {top: 20, right: 80, bottom: 40, left: 90};
       var width = 1600 - margin.left - margin.right;
       var height = (20 * data.length) - margin.top - margin.bottom;
-
-      // remove old graph
-      d3.select("#stats").selectAll("svg").remove();
 
       // append the new svg object to the body of the page
       var svg = d3.select("#stats")
@@ -148,6 +194,7 @@ export default {
         .attr("height", 10 ) // y.bandwidth()
         .attr("fill", "#69b3a2")
         .on("mouseover", function(d, barData) {
+          vm.selectedCharacters = [];
           // var tipx = 10 * i;
           // var tipy = d3.select(this).attr("height");
           d3.select(this).attr("r", 10).style("fill", "orange");
@@ -165,7 +212,6 @@ export default {
         })
         .on("mouseout", function() {
           d3.select(this).attr("r", 10).style("fill", "#69b3a2");
-          tooltip.style("visibility", "hidden");
         });
 
 
