@@ -76,37 +76,46 @@ export default {
       if(stat === 'Powers') { this.displayPowersGraph(); }
       else { this.displayStatsGraph(stat); }
     },
-    displayPowersGraph: function() {
+    displayPowersGraph: async function() {
+      const possiblePowers = await axios.get(`/api/powers`).data;
+      console.log('1');
+      console.log(possiblePowers);
+
       const singlePowers = [];
-      this.data.forEach((currentCharacter) => {
-        currentCharacter['Powers'].forEach((currentPower) => {
-          const existing = singlePowers.findIndex((entry) => entry['sets'] === [currentPower]);
-          if(existing === -1) {
-            singlePowers.push({ 'sets': [currentPower], 'size': 1 });
-          } else {
-            singlePowers[existing]['size'] += 1;
-          }
-        });
-      });
+      for(var p = 0; p < possiblePowers.length; p++) {
+        const power = possiblePowers[p];
+        const matches = await axios.get(`/api/haspower/${power}`).data;
+        singlePowers.push({ 'sets': [power], 'size': matches });
+        if(p < 5) {
+          console.log('1a');
+          console.log(`${power}: ${matches}`);
+        }
+      }
+      console.log('2');
+      console.log(singlePowers);
 
       const combinedPowers = [];
-      singlePowers.forEach((firstPower) => {
-        singlePowers.forEach((secondPower) => {
-          if(firstPower !== secondPower) {
-            const existing = combinedPowers.findIndex((entry) => entry['sets'].includes(firstPower) && entry['sets'].includes(secondPower));
-            if(existing === -1) {
-              combinedPowers.push({ 'sets': [firstPower, secondPower], 'size': 1 });
-            } else {
-              combinedPowers[existing]['size'] += 1;
-            }
+      for(var p1 = 0; p1 < possiblePowers.length; p1++) {
+        for (var p2 = p1; p2 < possiblePowers.length; p2++) {
+          const power1 = possiblePowers[p1];
+          const power2 = possiblePowers[p2];
+          const matches = await axios.get(`/api/haspowers/${power1}/${power2}`).data;
+          singlePowers.push({ 'sets': [power1, power2], 'size': matches });
+          if(p1 < 5) {
+            console.log('2a');
+            console.log(`${power1}, ${power2}: ${matches}`);
           }
-        });
-      });
+        }
+      }
+      console.log('3');
+      console.log(combinedPowers);
 
       var sets = new Set([
         ...singlePowers,
         ...combinedPowers
       ]);
+      console.log('4');
+      console.log(sets);
 
       var chart = venn.VennDiagram();
 
