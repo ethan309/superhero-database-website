@@ -45,7 +45,7 @@ export default {
     
     if(characterData.status === 200) {
       this.parseCharacterData(characterData.data);
-      this.displayStatsGraph('Intelligence');
+      this.displayStatsGraph(this.statOptions[0]);
       this.resultsFound = true;
     } else {
       this.resultsFound = false;
