@@ -25,6 +25,15 @@
 </template>
 
 <script>
+/*
+ * There is quite a bit of code commented out in this page.
+ * There were a few features we wanted to test out and play around with, but ultimately did not finish.
+ * These features were out of scope, but may still be possible, so the code remains for now like this.
+ * 
+ * One thing to note is that an expensive API call has been "cached" using a call to a local JSON file with the data.
+ * The original code remains (commented out) is still here, and does work, but is terribly slow since we are on the free tier of our DB.
+*/
+
 import * as d3 from 'd3';
 import axios from 'axios';
 import * as venn from 'venn.js';

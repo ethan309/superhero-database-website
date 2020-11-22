@@ -1,6 +1,8 @@
 # Superhero, Supervillain, & Character Database
 CSCE 411 (Data Modeling) Final Project
 
+Source file guidance can be found at `./src/README.md`
+
 View our site at: http://csce411final.us-east-2.elasticbeanstalk.com/Home
 
 Or run locally:
