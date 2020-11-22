@@ -164,14 +164,17 @@ h1 {
   padding-left: 20px;
   margin: 40px 0 0;
 }
+
 ul {  
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }
@@ -205,6 +208,7 @@ text {
   display: flex;
   flex-direction: column;
 }
+
 h2 {
   padding-left: 300px;
   margin-bottom: -40px;

@@ -48,6 +48,25 @@ router.get('/api/haspower/:powerone/:powertwo'), function(req, res) {
   })
 }
 
+router.get('/api/haspowertwo/:powerone/:powertwo'), function(req, res) {
+  let params = []
+  params.push(req.params.powerone);
+  if (req.params.powertwo) {
+    params.push(req.params.powertwo)
+  }
+  client.db("Superheroes").collection("Character").countDocuments({ Powers: { $all: params}})
+  .then( results => {
+    res.send(results);
+  })
+}
+
+router.get('/api/powers', function(req, res) {
+  client.db("Superheroes").collection("Character").distinct("Powers")
+  .then( results => {
+    res.send(results);
+  })
+})
+
 router.get('/*', function(req, res, next) {
   res.sendFile(__dirname + '/index.html'); 
 });
