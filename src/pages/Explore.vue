@@ -57,13 +57,17 @@ export default {
     },
     displayStatsGraph: function(stat) {
       const data = [];
+      var MAX_X = 1;
       this.data.forEach((currentCharacter) => {
         if(currentCharacter[stat] !== '') {
-          const existing = data.findIndex((entry) => entry['value'] === currentCharacter[stat])
+          const existing = data.findIndex((entry) => entry['value'] === currentCharacter[stat]);
           if(existing === -1) {
             data.push({ 'names': [currentCharacter['Name']], 'value': currentCharacter[stat] });
           } else {
             data[existing]['names'].push(currentCharacter['Name']);
+          }
+          if(currentCharacter[stat] > MAX_X) {
+            MAX_X = currentCharacter[stat];
           }
         }
       });
@@ -98,7 +102,6 @@ export default {
                 "translate(" + margin.left + "," + margin.top + ")");
 
       // Add X axis
-      const MAX_X = 125;
       var x = d3.scaleLinear()
         .domain([ 0, MAX_X ])
         .range([ 0, width ]);
