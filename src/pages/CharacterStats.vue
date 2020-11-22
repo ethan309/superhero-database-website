@@ -88,7 +88,7 @@ export default {
       });
     },
     displayStatsGraph: function() {
-      const numericalStats = this.stats.filter((stat) => { return typeof stat.value === 'number' })
+      const numericalStats = this.stats.filter((stat) => { return typeof stat.value === 'number' });
 
       const w = 500;
       const h = 500;
