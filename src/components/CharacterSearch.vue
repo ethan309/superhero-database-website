@@ -10,10 +10,10 @@
       <p v-show="queryError" class="error">There was an error completing your search. Please try again.</p>
       <div id="matches">
         <ul v-for="match in searchResults" v-bind:key="match.name">
-        <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
-          <CharacterCard v-bind:name="match.name"/>
-        </router-link>
-      </ul>
+          <router-link v-bind:to="{ name: 'Details', params: { id: match._id }}">
+            <CharacterCard v-bind:name="match.name"/>
+          </router-link>
+        </ul>
       </div>
     </div>
   </div>
