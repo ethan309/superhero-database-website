@@ -50,11 +50,14 @@ export default {
         });
         this.suggestedCharacters = charactersWithStats.sort(() => Math.random() - 0.5).slice(0, 40);
         this.suggestedCharactersLoaded = true;
+        this.suggestedCharactersError = false;
       } else {
+        this.suggestedCharactersLoaded = false;
         this.suggestedCharactersError = true;
         console.log(`Request Status: ${characters.status}`);
       }
     } catch(exception) {
+      this.suggestedCharactersLoaded = false;
       this.suggestedCharactersError = true;
       console.log(exception);
     }
