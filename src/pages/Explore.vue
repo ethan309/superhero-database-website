@@ -157,14 +157,11 @@ export default {
           // tooltip.attr("dy", y(barData.value) + 5);
           tooltip.style("visibility", "visible");
           tooltip.style("fill", "black");
-          tooltip.text(`${stat} ${barData.value}: ${barData.names.length} characters.`);
-        })
-        .on("click", function(d, barData) {
+          tooltip.text(`${stat} ${barData.value}: view ${barData.names.length} characters below:`);
           var selected = vm.data.filter((s) => { return barData.names.includes(s['Name']) });
           selected.forEach((currectCharacter) => {
             vm.selectedCharacters.push({ '_id': currectCharacter['_id'], 'name': currectCharacter['Name'] });
           });
-          console.log(vm.selectedCharacters);
         })
         .on("mouseout", function() {
           d3.select(this).attr("r", 10).style("fill", "#69b3a2");
