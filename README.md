@@ -25,7 +25,7 @@ yarn install
 Note: if you are unable to run the `deploy.sh` script, you may need to make it executable: `chmod u+x deploy.sh`
 
 ### Run site with backend
-*This is what you should do the first time your run the project.*
+*This is what you should do the first time you run the project.*
 
 ```
 yarn install
