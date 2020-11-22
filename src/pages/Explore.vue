@@ -77,14 +77,18 @@ export default {
       else { this.displayStatsGraph(stat); }
     },
     displayPowersGraph: async function() {
-      const possiblePowers = await axios.get(`/api/powers`).data;
+      const _possiblePowers = await axios.get(`/api/powers`);
+      const possiblePowers = _possiblePowers.data;
       console.log('1');
+      console.log(_possiblePowers);
+      console.log('1..');
       console.log(possiblePowers);
 
       const singlePowers = [];
       for(var p = 0; p < possiblePowers.length; p++) {
         const power = possiblePowers[p];
-        const matches = await axios.get(`/api/haspower/${power}`).data;
+        const _matches = await axios.get(`/api/haspowertwo/${power}`);
+        const matches = _matches.data;
         singlePowers.push({ 'sets': [power], 'size': matches });
         if(p < 5) {
           console.log('1a');
@@ -96,12 +100,13 @@ export default {
 
       const combinedPowers = [];
       for(var p1 = 0; p1 < possiblePowers.length; p1++) {
-        for (var p2 = p1; p2 < possiblePowers.length; p2++) {
+        for (var p2 = p1 + 1; p2 < possiblePowers.length; p2++) {
           const power1 = possiblePowers[p1];
           const power2 = possiblePowers[p2];
-          const matches = await axios.get(`/api/haspowers/${power1}/${power2}`).data;
+          const _matches = await axios.get(`/api/haspowertwo/${power1}/${power2}`);
+          const matches = _matches.data;
           singlePowers.push({ 'sets': [power1, power2], 'size': matches });
-          if(p1 < 5) {
+          if(p1 < 5 && p2 < 5) {
             console.log('2a');
             console.log(`${power1}, ${power2}: ${matches}`);
           }
@@ -123,16 +128,16 @@ export default {
       var tooltip = d3.select("body").append("div")
         .attr("class", "venntooltip");
 
-      var colours = ['black', 'red', 'blue', 'green'];
+      var colors = ['black', 'red', 'blue', 'green', 'yellow', 'purple'];
 
       d3.selectAll("#stats .venn-circle path")
         .style("fill-opacity", 0)
         .style("stroke-width", 10)
         .style("stroke-opacity", .5)
-        .style("stroke", function(d, i) { return colours[i]; });
+        .style("stroke", function(d, i) { return colors[i % colors.length]; });
 
       d3.selectAll("#stats .venn-circle text")
-        .style("fill", function(d, i) { return colours[i] })
+        .style("fill", function(d, i) { return colors[i % colors.length] })
         .style("font-size", "24px")
         .style("font-weight", "100");
       

@@ -36,7 +36,7 @@ router.get('/api/characters/', function(req, res) {
   })
 })
 
-router.get('/api/haspower/:powerone/:powertwo'), function(req, res) {
+router.get('/api/haspower/:powerone/:powertwo', function(req, res) {
   let params = []
   params.push(req.params.powerone);
   if (req.params.powertwo) {
@@ -46,9 +46,9 @@ router.get('/api/haspower/:powerone/:powertwo'), function(req, res) {
   .then( results => {
     res.send(results);
   })
-}
+})
 
-router.get('/api/haspowertwo/:powerone/:powertwo'), function(req, res) {
+router.get('/api/haspowertwo/:powerone/:powertwo', function(req, res) {
   let params = []
   params.push(req.params.powerone);
   if (req.params.powertwo) {
@@ -58,7 +58,7 @@ router.get('/api/haspowertwo/:powerone/:powertwo'), function(req, res) {
   .then( results => {
     res.send(results);
   })
-}
+})
 
 router.get('/api/powers', function(req, res) {
   client.db("Superheroes").collection("Character").distinct("Powers")
